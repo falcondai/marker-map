@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<style type="text/css">
+  html { height: 100% }
+  body { height: 100%; margin: 0; padding: 0; background-color: black; }
+  #map { height: 100%; opacity: 0.3; background-color: black; }
+	#status { 
+		width: 200px;
+		height: 25px;
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		padding: 20px; 
+		margin: auto;
+		text-align: center;
+		vertical-align: middle;
+		font-family: sans-serif;
+		font-weight: bolder;
+		font-size: 1.4em;
+		background-color: white;
+		border: 3px solid #888;
+		border-radius: 10px;
+	}
+	.info-box { font-family: sans-serif; }
+</style>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="markerclusterer/src/markerclusterer.js"></script>
+<script type="text/javascript" src="d3.v2.js"></script>
+<script type="text/javascript">
+	var map, mc, markers, iws;
+	
+	function make_content_string(row) {
+		var s = '';
+		for (var k in row) {
+			s += k.toString() + ': ' + ((row[k])? row[k].toString() : 'N\\A') + '<br />';
+		}
+		return '<div class="info-box">' + s + '</div>';
+	}
+	
+	function init() {
+		// initialize map
+		map = new google.maps.Map(document.getElementById("map"),
+		{
+			center: new google.maps.LatLng(0., 0.),
+			zoom: 3,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		});
+		
+		d3.select('#status').html('Loading data...');
+		
+		// parse URL arguments
+		var m = location.search.match(/csv=(.+?)(&|$)/);
+		if (!m || m.length < 2) {
+			d3.select('#status').html('Missing CSV path.');
+			return ;
+		}
+		var csv_url = decodeURIComponent(m[1]);
+		
+		// use d3js library's CSV async method for parsing
+		d3.csv(csv_url, 
+			function(rows) {
+				if (!rows) {
+					// error loading csv
+					d3.select('#status').html('Failed to load data.');
+					return ;
+				}
+				
+				d3.select('#status').html('Rendering data...');
+				
+				// create overlays
+				markers = [];
+				iws = [];
+				var center = { lat: 0., lng: 0. };
+				var n = 0;
+				for (var i in rows) {
+					var row = rows[i];
+					if (row.latitude && row.latitude != '') {
+						var marker = new google.maps.Marker({
+							position: new google.maps.LatLng(+row.latitude, +row.longitude),
+							map: map
+						});
+						marker.id = n;
+						markers.push(marker);
+						
+						var infowin = new google.maps.InfoWindow({
+							content: make_content_string(row)
+						});
+						iws.push(infowin);
+						google.maps.event.addListener(markers[n], 'click', function() {
+							iws[this.id].open(map, this);
+						});
+						
+						center.lat += +row.latitude;
+						center.lng += +row.longitude;
+						++n;
+					}
+				}
+				
+				center.lat /= n;
+				center.lng /= n;
+				
+				// cluster markers
+				mc = new MarkerClusterer(map, markers,
+				{
+					maxZoom: 15
+				});
+				
+				d3.select('#status').style('display', 'none');
+				d3.select('#map').style('opacity', 1.);
+				
+				// adjust map viewport to fit markers
+				var radius = 0.;
+				for (var i in markers) {
+					var p = markers[i].getPosition();
+					var r = Math.max(Math.abs(p.lat() - center.lat), Math.abs(p.lng() - center.lng));
+					radius = (radius < r)? r : radius;
+				}
+				map.panTo(new google.maps.LatLng(center.lat, center.lng));
+				map.setZoom(Math.floor(Math.log(Math.min(document.getElementById("map").clientWidth, document.getElementById("map").clientHeight) * 360. / radius / 2. / 256.) / Math.LN2));
+			}
+		);
+	}
+	
+</script>
+</head>
+<body onload="init()">
+	<div id="map"></div>
+	<div id="status">Loading map...</div>
+</body>
+</html>
