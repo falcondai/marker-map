@@ -11,13 +11,13 @@ The simplest use to start a basic web server at the folder.
 ``` bash
 $ python -m SimpleHTTPServer 5000
 ```
-or if you have installed `node.js` and `http-server` from `npm`:
+*or* if you have installed `node.js` and `http-server` from `npm`:
 
 ``` bash
 $ http-server -p 5000
 ```
 
-then visit [localhost:5000/overlay.html?csv=some_european_cities.csv](localhost:5000/overlay.html?csv=some_european_cities.csv) in your favorite browser(s).
+*then* visit [http://localhost:5000/overlay.html?csv=some_european_cities.csv](http://localhost:5000/overlay.html?csv=some_european_cities.csv) in your favorite browser(s).
 
 You can open remotely served CSV as well:
 [http://localhost:5000/overlay.html?csv=https%3A%2F%2Fdocs.google.com%2Fspreadsheet%2Fpub%3Fhl%3Den%26hl%3Den%26key%3D0Ah73xeahAckPdFRpUWl4cUZIZEFQRVlLbjB6RWFNamc%26output%3Dcsv](http://localhost:5000/overlay.html?csv=https%3A%2F%2Fdocs.google.com%2Fspreadsheet%2Fpub%3Fhl%3Den%26hl%3Den%26key%3D0Ah73xeahAckPdFRpUWl4cUZIZEFQRVlLbjB6RWFNamc%26output%3Dcsv)
