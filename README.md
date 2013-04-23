@@ -11,7 +11,7 @@ markers.html loads latitude-longitude pairs from a CSV (Comma Separated Value) f
 Uses
 ----
 
-The simplest use to start a basic web server at the folder.
+The simplest way to use `marker_map` to start a basic web server at the folder.
 
 ``` bash
 $ python -m SimpleHTTPServer 5000
@@ -25,9 +25,11 @@ $ http-server -p 5000
 **then** visit [http://localhost:5000/markers.html?csv=some_european_cities.csv](http://localhost:5000/markers.html?csv=some_european_cities.csv) in your favorite browser(s).
 
 You can open remotely served CSV as well:
-[http://localhost:5000/markers.html?csv=https%3A%2F%2Fdocs.google.com%2Fspreadsheet%2Fpub%3Fhl%3Den%26hl%3Den%26key%3D0Ah73xeahAckPdFRpUWl4cUZIZEFQRVlLbjB6RWFNamc%26output%3Dcsv](http://localhost:5000/markers.html?csv=https%3A%2F%2Fdocs.google.com%2Fspreadsheet%2Fpub%3Fhl%3Den%26hl%3Den%26key%3D0Ah73xeahAckPdFRpUWl4cUZIZEFQRVlLbjB6RWFNamc%26output%3Dcsv)
+[http://localhost:5000/markers.html?csv=https%3A%2F%2Fdocs.google.com%2Fspreadsheet%2Fpub%3Fhl%3Den%26hl%3Den%26key%3D0Ah73xeahAckPdFRpUWl4cUZIZEFQRVlLbjB6RWFNamc%26output%3Dcsv](http://localhost:5000/markers.html?csv=https%3A%2F%2Fdocs.google.com%2Fspreadsheet%2Fpub%3Fhl%3Den%26hl%3Den%26key%3D0Ah73xeahAckPdFRpUWl4cUZIZEFQRVlLbjB6RWFNamc%26output%3Dcsv) which is [a list of red-light cameras' locations at Chicago][1].
 
 You can also integrate it into your existing project.
+
+[1]: https://docs.google.com/spreadsheet/pub?key=0Ah73xeahAckPdFRpUWl4cUZIZEFQRVlLbjB6RWFNamc&output=html
 
 Nice features
 -------------
